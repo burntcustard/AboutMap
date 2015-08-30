@@ -138,16 +138,16 @@ d3.json("aboutMe.json", function(error, json) {
   for(var i = 0; i < texts.length; i++) {
     switch (true) {
       case (texts[i].textContent.indexOf("github") >= 0): 
-        createIcon(i, "github.png");
+        createIcon(i, "icons/github.png");
         break;
       case (texts[i].textContent.indexOf("facebook") >= 0): 
-        createIcon(i, "facebook.png");
+        createIcon(i, "icons/facebook.png");
         break;
       case (texts[i].textContent.indexOf("twitter") >= 0): 
-        createIcon(i, "twitter.png");
+        createIcon(i, "icons/twitter.png");
         break;
       case (texts[i].textContent.indexOf("codepen") >= 0): 
-        createIcon(i, "codepen.png");
+        createIcon(i, "icons/codepen.png");
         break;
     }
   }

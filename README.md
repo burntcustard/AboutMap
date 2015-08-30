@@ -10,8 +10,9 @@ Eventually I may remove all of my data, and give proper instructions to allow pe
 
 ###Things you can help me fix (a.k.a. known bugs):
 * Firefox open-in-new-tab function opens the image, not the hyperlink, in a new tab. No idea why only Firefox.
-* Alignment of text labels is done so that nodes on the left of the SVG have right aligned text, and nodes on the right have left aligned (that makes sense), however, it would be great to implement a better system like [this one](http://bl.ocks.org/MoritzStefaner/1377729) by MoritzStefaner.
-* Need more icons!  
+* Alignment of text labels is done so that nodes on the left of the SVG have right aligned text, and nodes on the right have left aligned (you know what I mean), however, it would be great to implement a better system like [this one](http://bl.ocks.org/MoritzStefaner/1377729) by MoritzStefaner.
+* Need more icons!
+* Icons are drawn over text, when ideally text should be drawn over icons (or user configurable).
 
 ###Credits
 Icons created by (or based on) Neil Hainsworth's [Free Social Icons set](https://www.iconfinder.com/iconsets/free-social-icons).  

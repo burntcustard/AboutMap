@@ -1,3 +1,4 @@
+![](https://github.com/burntcustard/AboutMap/blob/master/example.png?raw=true)
 #AboutMap
 AboutMap is a project built using the [D3.js](http://d3js.org/) [force layout](https://github.com/mbostock/d3/wiki/Force-Layout) to create an interesting "about me" type webpage.  
 

@@ -1,0 +1,176 @@
+var width = 0,
+    height = 0,
+    imgWidth = 120,
+    imgHeight = 120;
+
+var color = d3.scale.category10();
+
+var force = d3.layout.force()
+    .charge(-999)
+    .linkDistance(120)
+    .size([width, height])
+    .linkDistance(function(d) {
+      var length = 6;
+      if ( d.size && !d.size[1]) { length = d.size[0] };
+      if ( d.size &&  d.size[1]) { length = d.size[1] };
+      return (length * 15);
+    });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width) // d3/svg trying to be clever and not exact argh
+    .attr("height", height)
+    .style("display", "block");
+
+var defs = svg.append("defs");
+
+  defs.append("pattern")
+    .attr("id", "face")
+    .attr('patternUnits', 'userSpaceOnUse')
+    .attr("width", imgWidth)
+    .attr("height", imgHeight)
+    .attr("x", - imgWidth / 2)  // Center the image in the pattern
+    .attr("y", - imgHeight / 2)
+    .append("image")
+      .attr("xlink:href", "face.png")
+      .attr("width", imgWidth)
+      .attr("height", imgHeight);
+
+window.onresize = resizeSVG;
+
+function resizeSVG() {
+  console.log("Resizing SVG");
+  width = window.innerWidth;
+  height = window.innerHeight;
+  svg.attr("width", width)
+     .attr("height", height);
+  force.size([width, height]).resume();
+}
+
+window.onload = function() {
+  resizeSVG(); 
+}
+
+d3.json("aboutMe.json", function(error, json) {
+  if (error) throw error;
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) {
+        return (d.size ? d.size[0] / 2 : 3);
+      });
+
+  var node = svg.selectAll(".node")
+    .data(json.nodes)
+    .enter().append('g')
+      .attr("class", "node")
+      .call(force.drag);
+  
+  node.append("circle")
+    .attr("r", function(d) { return d.size; })
+    .style("fill", function(d) { return color(d.group); });
+  
+  node.append("text")
+    .attr("dx", 0)
+    .attr("dy", ".35em")
+    .attr("font-size", function(d) { return d.size * 2.2; })
+    .text(function(d) { return d.text[0]; });
+  
+  node.append("text")
+    .attr("dx", 12)
+    .attr("dy", "1.55em")
+    .attr("font-size", function(d) { return d.size * 2.2; })
+    .text(function(d) { return d.text[1]; });
+  
+  node.append("text")
+    .attr("dx", 12)
+    .attr("dy", "2.75em")
+    .attr("font-size", function(d) { return d.size * 2.2; })
+    .text(function(d) { return d.text[2]; });
+  
+  // Select just the first node, and give it an image 'n' stuff
+  svg.select(".node").select("circle")
+    .attr("class", "faceCircle")
+    .style("fill", "url(#face)")
+    //.style("filter", "url(#shadow)")
+    .attr("r", imgHeight / 2)
+    .attr("x", - imgWidth / 2)
+    .attr("y", - imgHeight / 2)
+    .attr("width", imgWidth)
+    .attr("height", imgHeight);
+  
+  
+  
+  // Find icon nodes, remove their text, and give them icons:
+  
+  // Create array of text elements:
+  var texts = d3.selectAll(".node").select("text");
+  texts = texts[0];
+  console.log(texts)
+  
+  function createIcon(i, img) {
+
+    // Add image:
+    d3.select(texts[i].parentNode)
+      .append("a")
+        .attr("width", 64)
+        .attr("height", 64)
+        .attr("xlink:href", texts[i].textContent)
+        .append("image")
+          .attr("xlink:href", img)
+          .attr("x", -32)
+          .attr("y", -32)
+          .attr("width", 64)
+          .attr("height", 64);
+    
+    // Remove text and old dot:
+    d3.select(texts[i].parentNode).select("circle").remove();
+    d3.select(texts[i].parentNode).select("text").text("");
+    
+  }
+  
+  for(var i = 0; i < texts.length; i++) {
+    switch (true) {
+      case (texts[i].textContent.indexOf("github") >= 0): 
+        createIcon(i, "github.png");
+        break;
+      case (texts[i].textContent.indexOf("facebook") >= 0): 
+        createIcon(i, "facebook.png");
+        break;
+      case (texts[i].textContent.indexOf("twitter") >= 0): 
+        createIcon(i, "twitter.png");
+        break;
+      case (texts[i].textContent.indexOf("codepen") >= 0): 
+        createIcon(i, "codepen.png");
+        break;
+    }
+  }
+  
+  
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    // Align text label left or right:
+    d3.selectAll("text").attr("dx", function(d) { 
+        var parentX = d.x;
+        if (parentX < (width / 2)) {
+          return (- this.getBBox().width - 12);
+        } else {
+          return 12;
+        }
+      });
+
+  });
+});

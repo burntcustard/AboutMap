@@ -3,8 +3,6 @@ var width = 0,
     imgWidth = 120,
     imgHeight = 120;
 
-var color = d3.scale.category10();
-
 var force = d3.layout.force()
     .charge(-999)
     .linkDistance(120)
@@ -61,42 +59,51 @@ d3.json("aboutMe.json", function(error, json) {
   var link = svg.selectAll(".link")
       .data(json.links)
     .enter().append("line")
-      .attr("class", "link")
+      .attr("class", "links")
+      .style("stroke", function(d) { return d.color })
       .style("stroke-width", function(d) {
         return (d.size ? d.size[0] / 2 : 3);
       });
 
   var node = svg.selectAll(".node")
     .data(json.nodes)
-    .enter().append('g')
+    .enter().append("g")
       .attr("class", "node")
       .call(force.drag);
   
   node.append("circle")
-    .attr("r", function(d) { return d.size; })
-    .style("fill", function(d) { return color(d.group); });
+    .attr("class", "nodes")
+    .attr("r", function(d) { return d.size || 10; })
+    .style("fill", function(d) { return d.color });
   
   node.append("text")
     .attr("dx", 0)
     .attr("dy", ".35em")
     .attr("font-size", function(d) { return d.size * 2.2; })
-    .text(function(d) { return d.text[0]; });
+    .text(function(d) { 
+      console.log(d.text);
+      if (d.text instanceof Array) {
+        return d.text[0]; 
+      } else {
+        return d.text;
+      }
+    });
   
   node.append("text")
     .attr("dx", 12)
     .attr("dy", "1.55em")
     .attr("font-size", function(d) { return d.size * 2.2; })
-    .text(function(d) { return d.text[1]; });
+    .text(function(d) { if (d.text instanceof Array) { return d.text[1]; } });
   
   node.append("text")
     .attr("dx", 12)
     .attr("dy", "2.75em")
     .attr("font-size", function(d) { return d.size * 2.2; })
-    .text(function(d) { return d.text[2]; });
+    .text(function(d) { if (d.text instanceof Array) { return d.text[2]; } });
   
   // Select just the first node, and give it an image 'n' stuff
   svg.select(".node").select("circle")
-    .attr("class", "faceCircle")
+    .attr("class", "centerNode")
     .style("fill", "url(#face)")
     //.style("filter", "url(#shadow)")
     .attr("r", imgHeight / 2)
@@ -129,7 +136,7 @@ d3.json("aboutMe.json", function(error, json) {
           .attr("width", 64)
           .attr("height", 64);
     
-    // Remove text and old dot:
+    // Remove old dot and remove the link from appearing as text:
     d3.select(texts[i].parentNode).select("circle").remove();
     d3.select(texts[i].parentNode).select("text").text("");
     

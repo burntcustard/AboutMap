@@ -1,28 +1,21 @@
-html{
-  height: 100%;
-}
-
 body {
 	background-color: #eaeaea;
   font-family: 'Open Sans', sans-serif;
-  margin: 0;
-  border: 0;
 }
 
 <!-- SVG styling -->
 
-.node {
-  stroke: #2d2d2d;
-  stroke-width: 2px;
+.nodes {
+  fill: #2d2d2d;
 }
 
-.faceCircle {
+.links {
+  stroke: #2d2d2d; 
+}
+
+.centerNode {
   stroke: #2d2d2d;
   stroke-width: 10px;
-}
-
-.link {
-  stroke: #2d2d2d;
 }
 
 text { 

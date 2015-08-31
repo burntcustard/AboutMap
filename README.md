@@ -13,6 +13,7 @@ Eventually I may remove all of my data, and give proper instructions to allow pe
 * Alignment of text labels is done so that nodes on the left of the SVG have right aligned text, and nodes on the right have left aligned (you know what I mean), however, it would be great to implement a better system like [this one](http://bl.ocks.org/MoritzStefaner/1377729) by MoritzStefaner.
 * Need more icons!
 * Icons are drawn over text, when ideally text should be drawn over icons (or user configurable).
+* Some things defaults can be set, so that if you don't set them in the .json, they use a value from the stylesheet. More stuff should be configurable from CSS, but it seems fiddly setting stuff like SVG circle radius with CSS. 
 
 ###Credits
 Icons created by (or based on) Neil Hainsworth's [Free Social Icons set](https://www.iconfinder.com/iconsets/free-social-icons).  

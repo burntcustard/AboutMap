@@ -8,14 +8,19 @@ var force = d3.layout.force()
     .linkDistance(120)
     .size([width, height])
     .linkDistance(function(d) {
-      var length = 6;
-      if ( d.size && !d.size[1]) { length = d.size[0] };
-      if ( d.size &&  d.size[1]) { length = d.size[1] };
-      return (length * 15);
+      if (d.size) {
+        if (d.size instanceof Array) {
+          return (d.size[0] * 15);
+        } else {
+          return (d.size * 15);
+        }
+      } else {
+        return 90; // Default length of a linking line is 90 pixels.
+      }
     });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", width) // d3/svg trying to be clever and not exact argh
+    .attr("width", width)
     .attr("height", height)
     .style("display", "block");
 
@@ -26,7 +31,7 @@ var defs = svg.append("defs");
     .attr('patternUnits', 'userSpaceOnUse')
     .attr("width", imgWidth)
     .attr("height", imgHeight)
-    .attr("x", - imgWidth / 2)  // Center the image in the pattern
+    .attr("x", - imgWidth / 2)  // Center the image in the pattern.
     .attr("y", - imgHeight / 2)
     .append("image")
       .attr("xlink:href", "face.png")
@@ -62,7 +67,14 @@ d3.json("aboutMe.json", function(error, json) {
       .attr("class", "links")
       .style("stroke", function(d) { return d.color })
       .style("stroke-width", function(d) {
-        if (d.size) { return (d.size / 2); }
+        if (d.size) { 
+          if (d.size instanceof Array) {
+            return (d.size[1] / 2);
+          } else {
+            return (d.size / 2);
+          }
+        } // Else use that which is set in .links.
+          // If none is set there either, then there are no visual links!
       });
 
   var node = svg.selectAll(".node")
@@ -101,7 +113,7 @@ d3.json("aboutMe.json", function(error, json) {
     .attr("font-size", function(d) { return d.size * 2.2; })
     .text(function(d) { if (d.text instanceof Array) { return d.text[2]; } });
   
-  // Select just the first node, and give it an image 'n' stuff
+  // Select just the first node, and give it an image 'n' stuff:
   svg.select(".node").select("circle")
     .attr("class", "centerNode")
     .style("fill", "url(#face)")

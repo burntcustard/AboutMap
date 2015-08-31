@@ -10,7 +10,8 @@ body {
 }
 
 .links {
-  stroke: #2d2d2d; 
+  stroke: #2d2d2d;
+  stroke-width: 3px;
 }
 
 .centerNode {

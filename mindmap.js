@@ -62,7 +62,7 @@ d3.json("aboutMe.json", function(error, json) {
       .attr("class", "links")
       .style("stroke", function(d) { return d.color })
       .style("stroke-width", function(d) {
-        return (d.size ? d.size[0] / 2 : 3);
+        if (d.size) { return (d.size / 2); }
       });
 
   var node = svg.selectAll(".node")
@@ -73,7 +73,7 @@ d3.json("aboutMe.json", function(error, json) {
   
   node.append("circle")
     .attr("class", "nodes")
-    .attr("r", function(d) { return d.size || 10; })
+    .attr("r", function(d) { return d.size || 10 })
     .style("fill", function(d) { return d.color });
   
   node.append("text")
@@ -81,7 +81,7 @@ d3.json("aboutMe.json", function(error, json) {
     .attr("dy", ".35em")
     .attr("font-size", function(d) { return d.size * 2.2; })
     .text(function(d) { 
-      console.log(d.text);
+      //console.log(d.text);
       if (d.text instanceof Array) {
         return d.text[0]; 
       } else {
@@ -119,7 +119,7 @@ d3.json("aboutMe.json", function(error, json) {
   // Create array of text elements:
   var texts = d3.selectAll(".node").select("text");
   texts = texts[0];
-  console.log(texts)
+  //console.log(texts)
   
   function createIcon(i, img) {
 
